@@ -1,0 +1,48 @@
+.grid {
+    display: flex;
+    
+    /* 1. The Magic Gap Calculation:
+       (Total Width - (6 cards * 200px)) / 5 Gaps 
+    */
+    gap: calc((100% - (6 * 200px)) / 5);
+    
+    width: 100%;
+    max-width: 100rem;
+    margin: calc(3rem - 10rem) auto 0 auto;
+    
+    /* Padding for shadows and edge alignment */
+    padding: 10rem 3rem; 
+    scroll-padding-left: 3rem;
+
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    box-sizing: border-box; /* Padding is now inside the 100% */
+}
+.heading {
+    /* 1. Reset default browser margins */
+    margin: 0;
+    
+    /* 2. Push it to the left wall */
+    align-self: flex-start;
+    
+    /* 3. Match the Grid's padding-left (3rem) */
+    margin-left: 3rem;
+    
+    /* Optional: styling to match your Hero headline look */
+    font-size: 1.3rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--color-text);
+    margin-bottom: -8rem; /* Offsets the large 10rem top padding on your grid */
+    position: relative;
+    z-index: 3;
+}
+
+.grid > * {
+    /* Fixed width as requested */
+    flex: 0 0 200px; 
+    
+    scroll-snap-align: start;
+    overflow: visible; 
+}

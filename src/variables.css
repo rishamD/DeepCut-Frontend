@@ -1,0 +1,67 @@
+:root {
+    /* Logo gradient colors */
+    --color-logo-1: #5257e5;
+    --color-logo-2: #597ae4;
+    --color-logo-3: #619de3;
+    --color-logo-4: #68c0e2;
+    --color-logo-5: #6fe3e1;
+
+    /* Brand */
+    --color-primary: var(--color-logo-1);
+    --color-secondary: var(--color-logo-3);
+
+    /* Backgrounds */
+    --color-bg: #0a0a0f;
+    --color-card-bg: #1a1a2e;
+
+    /* Text */
+    --color-text: #ffffff;
+    --color-text-muted: #d1d5db;
+    --color-text-faint: #6b7280;
+
+    /* Accents */
+    --color-star: #facc15;
+    --color-star-half: #fde68a;
+    --color-star-empty: #374151;
+    --color-error: #f87171;
+    --color-warning: #fbbf24;
+
+    /* Gradients */
+    --gradient-logo: linear-gradient(
+        to right,
+        var(--color-logo-1),
+        var(--color-logo-2),
+        var(--color-logo-3),
+        var(--color-logo-4),
+        var(--color-logo-5)
+    );
+    --gradient-button: var(--gradient-logo);
+    --gradient-overlay: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(0, 0, 0, 0.75) 50%,
+        rgba(0, 0, 0, 0.95) 100%
+    );
+    --gradient-poster-title: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.95) 0%,
+        transparent 100%
+    );
+
+    /* Shadows / Glows */
+    --glow-primary: 0 0 20px rgba(97, 157, 227, 0.25);
+    --glow-secondary: 0 0 16px rgba(82, 87, 229, 0.4);
+    --glow-card-hover: 0 12px 40px rgba(97, 157, 227, 0.3);
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-logo: 0 0 20px rgba(97, 157, 227, 0.3);
+    --shadow-logo-blur: drop-shadow(0 4px 8px rgba(97, 157, 227, 0.3));
+
+    /* Borders */
+    --border-primary: 2px solid var(--color-primary);
+    --border-card: 1px solid rgba(255, 255, 255, 0.1);
+    --border-card-hover: rgba(97, 157, 227, 0.5);
+
+    /* Misc */
+    --border-radius-card: 14px;
+    --border-radius-pill: 9999px;
+}
