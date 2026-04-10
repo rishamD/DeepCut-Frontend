@@ -28,7 +28,7 @@ export default function SearchBar({ onSubmit, loading }) {
     };
 
     // The radius for the pill shape
-    const r = dims.height / 2;
+    const r = 15;
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>

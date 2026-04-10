@@ -1,0 +1,85 @@
+.carouselSection {
+    width: 100%;
+    /* No min-height allowed here */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    margin: 2rem 0; /* Space only appears when component renders */
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.carouselWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    height: 450px; /* Reduced fixed height for a tighter look */
+    perspective: 2000px;
+}
+
+.stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+}
+
+.carouselSlide {
+    position: absolute;
+    width: 9.5rem;
+    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    cursor: pointer;
+
+    transform:
+        translateX(calc(var(--offset) * 11rem))
+        scale(calc(1 - var(--abs-offset) * 0.12))
+        translateZ(calc(var(--abs-offset) * -60px));
+
+    opacity: calc(1 - var(--abs-offset) * 0.2);
+    pointer-events: auto;
+}
+
+.carouselSlide.active {
+    transform: translateX(0) scale(1) translateZ(200px);
+    opacity: 1;
+    z-index: 100;
+}
+
+.navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.4);
+    border: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 0.2s ease;
+    z-index: 200;
+    line-height: 1;
+}
+
+.navButton:hover {
+    color: rgba(255, 255, 255, 0.95);
+    background: transparent;
+    box-shadow: none;
+}
+
+.prev { left: -3rem; }
+.next { right: -3rem; }

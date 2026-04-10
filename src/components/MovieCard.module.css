@@ -1,18 +1,18 @@
 .cardWrapper {
     position: relative;
-    width: 12.5rem; /* 200px */
+    /* Increase baseline width from 12.5rem to 18rem */
+    width: 14rem; 
     flex-shrink: 0;
     z-index: 1;
-    transition: transform 0.4s ease;
-    
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: visible !important; 
-}
-
-.cardWrapper:hover {
-    transform: translateY(-0.625rem); /* 10px */
+    overflow: visible !important;
+    
+    /* Force GPU to keep vector text sharp */
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform;
 }
 
 .themeShadow {
@@ -34,24 +34,28 @@
     background-image: var(--poster-url);
     background-size: cover;
     background-position: center;
-    border-radius: 0.75rem; /* 12px */
+    border-radius: 0.75rem;
     will-change: filter, transform;
 }
 
-/* Layer 1: The Main Color Source - YOUR SCALE 1 */
+/* Restored Layer 1: Main glow */
 .themeShadow::before {
-    transform: translateY(2.1875rem) scale(1); /* 35px */
-    filter: blur(2.8125rem) brightness(0.7) saturate(1.5); /* 45px blur */
+    mix-blend-mode: screen;
+    transform: translateY(2.1875rem) scale(1.15);
+    filter: blur(1.5rem) brightness(1.2) saturate(1.5);
+    opacity: 0.4;
 }
 
-/* Layer 2: Mirrored - YOUR SCALE -1 */
+/* Restored Layer 2: Deep colorful atmospheric glow */
 .themeShadow::after {
-    transform: translateY(2.1875rem) scaleX(-1) scaleY(1);
-    filter: blur(2.8125rem) brightness(0.7) saturate(1.5);
+    mix-blend-mode: screen;
+    transform: translateY(2.8rem) scale(1.15);
+    filter: blur(3.5rem) brightness(1.8) saturate(2);
 }
 
+/* Carousel and Hover triggers */
 .cardWrapper:hover .themeShadow {
-    opacity: 0.6; /* Your requested hover opacity */
+    opacity: 1;
 }
 
 .card {
@@ -65,6 +69,9 @@
     overflow: hidden;
     position: relative;
     z-index: 2;
+    /* Keeps images sharp */
+    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
 }
 
 .posterWrapper {
@@ -84,14 +91,13 @@
     padding: 1rem 0.8rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem; /* 8px */
+    gap: 0.5rem;
     background: #16161f;
 }
 
 .metaTitle {
     font-size: 0.85rem;
-    font-weight: 700;
-    margin: 0;
+    font-weight: 500;
     color: #fff;
     white-space: nowrap;
     overflow: hidden;
@@ -99,15 +105,43 @@
 }
 
 .metaYear {
-    color: #6b7280;
-    font-weight: 400;
+    color: rgba(255, 255, 255, 0.4);
     font-size: 0.75rem;
 }
 
-/* Stars Styling */
-.starsContainer { display: flex; align-items: center; gap: 6px; }
-.stars { display: flex; gap: 2px; }
-.starWrapper { position: relative; display: inline-block; font-size: 0.8rem; line-height: 1; }
-.starEmpty { color: #2d3748; }
-.starFilled { color: #facc15; position: absolute; top: 0; left: 0; overflow: hidden; white-space: nowrap; }
-.ratingNum { font-size: 0.75rem; font-weight: 900; color: #facc15; }
+/* Star Rating Styles */
+.starsContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.starWrapper {
+    position: relative;
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.starEmpty {
+    color: #374151;
+}
+
+.starFilled {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #facc15;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.ratingNum {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    font-weight: 600;
+}

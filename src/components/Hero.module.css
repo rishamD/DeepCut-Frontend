@@ -34,9 +34,9 @@
     align-items: center;
     /* Change from center to flex-start to allow the grid to flow naturally below the search bar */
     justify-content: flex-start; 
-    min-height: 100vh;
+    min-height: 60vh;
     /* Add padding to the top to give the absolute-positioned logo space */
-    padding: 12rem 1rem 5rem; 
+    padding: 10rem 1rem 1rem; 
     gap: 1.5rem;
 }
 
@@ -56,15 +56,13 @@
 .logo {
     display: flex;
     position: absolute;
-    top: 2rem; 
+    top: 1rem; 
     left: 50%;
     transform: translateX(-50%);
     justify-content: center;
     align-items: center;
     font-size: 4rem;
     font-weight: 900;
-    filter: drop-shadow(0 0 20px rgba(97, 157, 227, 0.3))
-        var(--shadow-logo-blur);
 }
 
 .logo span {

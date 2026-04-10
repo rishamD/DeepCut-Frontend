@@ -2,6 +2,7 @@
 import Hero from "./components/Hero";
 import SearchBar from "./components/SearchBar";
 import MovieGrid from "./components/MovieGrid";
+import MovieCarousel from "./components/MovieCarousel";
 import { useRecommendations } from "./hooks/useRecommendations";
 
 export default function App() {
@@ -12,7 +13,7 @@ export default function App() {
         <div className="bg-gray-950 min-h-screen">
             <Hero>
                 <SearchBar onSubmit={fetchRecommendations} loading={loading} />
-                <MovieGrid movies={movies} status={status} error={error} />
+                <MovieCarousel movies={movies} status={status} error={error} />
             </Hero>
         </div>
     );

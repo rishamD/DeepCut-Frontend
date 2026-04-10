@@ -17,7 +17,7 @@
     align-items: center;
     width: 100%;
     /* Use the same radius variable for consistency */
-    border-radius: 9999px; 
+    border-radius: 15px; 
     background: transparent;
     box-shadow: var(--glow-primary);
     /* Prevents the SVG stroke from appearing clipped or misaligned */
@@ -60,7 +60,7 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     padding: 0.85rem 1.5rem;
-    border-radius: 9999px;
+    border-radius: 15px;
     cursor: pointer;
     white-space: nowrap;
     transition: opacity 0.2s;
