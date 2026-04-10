@@ -60,7 +60,7 @@ export default function MovieCard({ movie, isFocused }) {
   const [attempt, setAttempt] = useState(0);
 
   const getActiveUrl = () => {
-    const cleanSlug = slug;
+    const cleanSlug = slug.replace(/-\d{4}$/, ""); // Remove trailing year if present
 
     switch (attempt) {
       case 0: return generateLtrbxdUrl(filmId, slug, 1000, 1500);
