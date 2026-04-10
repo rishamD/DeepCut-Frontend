@@ -7,6 +7,7 @@ export default function MovieCarousel({ movies, status }) {
     const [isHovering, setIsHovering] = useState(false);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const autoPlayInterval = useRef(null);
+    const scrollRef = useRef(null);
 
     const nextSlide = useCallback(() => {
         if (!movies?.length) return;
@@ -29,6 +30,32 @@ export default function MovieCarousel({ movies, status }) {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [nextSlide, prevSlide]);
 
+    // Horizontal scroll controls
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+
+        let accumulated = 0;
+
+        const handleWheel = (e) => {
+            if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+            e.preventDefault();
+
+            accumulated += e.deltaX;
+
+            if (accumulated > 50) {
+                nextSlide();
+                accumulated = 0;
+            } else if (accumulated < -50) {
+                prevSlide();
+                accumulated = 0;
+            }
+        };
+
+        el.addEventListener("wheel", handleWheel, { passive: false });
+        return () => el.removeEventListener("wheel", handleWheel);
+    }, [nextSlide, prevSlide]);
+
     // Auto-play logic
     useEffect(() => {
         if (!isAutoPlaying || isHovering || !movies || movies.length <= 1) return;
@@ -36,15 +63,15 @@ export default function MovieCarousel({ movies, status }) {
         return () => clearInterval(autoPlayInterval.current);
     }, [isAutoPlaying, isHovering, movies, nextSlide]);
 
-    // THE STRIP FIX: Return absolutely nothing if status isn't right or movies are empty
     if (!status || status === "IDLE" || status === "LOADING" || !movies || movies.length === 0) {
-        return null; 
+        return null;
     }
 
     return (
         <section className={styles.carouselSection}>
-            <div 
+            <div
                 className={styles.carouselWrapper}
+                ref={scrollRef}
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
             >
@@ -59,8 +86,8 @@ export default function MovieCarousel({ movies, status }) {
                         if (absOffset > 4) return null;
 
                         return (
-                            <div 
-                                key={movie.id || movie.slug} 
+                            <div
+                                key={movie.id || movie.slug}
                                 className={`${styles.carouselSlide} ${offset === 0 ? styles.active : ""}`}
                                 onClick={() => {
                                     setActiveIndex(index);
@@ -72,9 +99,9 @@ export default function MovieCarousel({ movies, status }) {
                                     zIndex: 10 - absOffset,
                                 }}
                             >
-                                <MovieCard 
-                                    movie={movie} 
-                                    isFocused={offset === 0} 
+                                <MovieCard
+                                    movie={movie}
+                                    isFocused={offset === 0}
                                 />
                             </div>
                         );
