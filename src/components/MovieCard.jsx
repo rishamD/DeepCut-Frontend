@@ -110,7 +110,7 @@ export default function MovieCard({ movie, isFocused }) {
               {year && <span className={styles.metaYear}>({year})</span>}
             </p>
           )}
-          {rating && <StarRating rating={rating} />}
+          {rating != null && <StarRating rating={rating} />}
         </div>
       </a>
     </div>

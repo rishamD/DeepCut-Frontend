@@ -19,10 +19,13 @@ export default function MovieCarousel({ movies, status }) {
         setActiveIndex((prev) => (prev - 1 + movies.length) % movies.length);
     }, [movies?.length]);
 
-    // Keyboard controls
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+            if (
+                e.target.tagName === "INPUT" ||
+                e.target.tagName === "TEXTAREA"
+            )
+                return;
             if (e.key === "ArrowRight") nextSlide();
             if (e.key === "ArrowLeft") prevSlide();
         };
@@ -30,7 +33,6 @@ export default function MovieCarousel({ movies, status }) {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [nextSlide, prevSlide]);
 
-    // Horizontal scroll controls
     useEffect(() => {
         const el = scrollRef.current;
         if (!el) return;
@@ -40,9 +42,7 @@ export default function MovieCarousel({ movies, status }) {
         const handleWheel = (e) => {
             if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
             e.preventDefault();
-
             accumulated += e.deltaX;
-
             if (accumulated > 50) {
                 nextSlide();
                 accumulated = 0;
@@ -56,19 +56,26 @@ export default function MovieCarousel({ movies, status }) {
         return () => el.removeEventListener("wheel", handleWheel);
     }, [nextSlide, prevSlide]);
 
-    // Auto-play logic
     useEffect(() => {
-        if (!isAutoPlaying || isHovering || !movies || movies.length <= 1) return;
+        if (!isAutoPlaying || isHovering || !movies || movies.length <= 1)
+            return;
         autoPlayInterval.current = setInterval(nextSlide, 5000);
         return () => clearInterval(autoPlayInterval.current);
     }, [isAutoPlaying, isHovering, movies, nextSlide]);
 
-    if (!status || status === "IDLE" || status === "LOADING" || !movies || movies.length === 0) {
+    if (
+        !status ||
+        status === "IDLE" ||
+        status === "LOADING" ||
+        !movies ||
+        movies.length === 0
+    ) {
         return null;
     }
 
     return (
         <section className={styles.carouselSection}>
+            {/* Desktop carousel */}
             <div
                 className={styles.carouselWrapper}
                 ref={scrollRef}
@@ -108,8 +115,29 @@ export default function MovieCarousel({ movies, status }) {
                     })}
                 </div>
 
-                <button className={`${styles.navButton} ${styles.prev}`} onClick={prevSlide}>‹</button>
-                <button className={`${styles.navButton} ${styles.next}`} onClick={nextSlide}>›</button>
+                <button
+                    className={`${styles.navButton} ${styles.prev}`}
+                    onClick={prevSlide}
+                >
+                    ‹
+                </button>
+                <button
+                    className={`${styles.navButton} ${styles.next}`}
+                    onClick={nextSlide}
+                >
+                    ›
+                </button>
+            </div>
+
+            {/* Mobile list */}
+            <div className={styles.mobileList}>
+                {movies.map((movie) => (
+                    <MovieCard
+                        key={movie.id || movie.slug}
+                        movie={movie}
+                        isFocused={false}
+                    />
+                ))}
             </div>
         </section>
     );
