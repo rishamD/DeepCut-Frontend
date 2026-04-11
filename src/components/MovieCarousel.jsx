@@ -43,10 +43,10 @@ export default function MovieCarousel({ movies, status }) {
             if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
             e.preventDefault();
             accumulated += e.deltaX;
-            if (accumulated > 50) {
+            if (accumulated > 100) {
                 nextSlide();
                 accumulated = 0;
-            } else if (accumulated < -50) {
+            } else if (accumulated < -100) {
                 prevSlide();
                 accumulated = 0;
             }
