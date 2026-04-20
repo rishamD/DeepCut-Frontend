@@ -2,21 +2,28 @@ import { useState } from "react";
 import styles from "./MovieCard.module.css";
 
 /**
- * GENERATE URL HELPER
- * Ensures the ID and Slug are separated correctly and allows dynamic sizing
+ * URL FORMATTER
+ * Takes the partial path from the model and replaces dimensions.
+ * Input: "film-poster/4/3/8/7/5/1/438751-klaus-0-230-0-345-crop"
+ * Output: "https://a.ltrbxd.com/resized/film-poster/4/3/8/7/5/1/438751-klaus-0-1000-0-1500-crop.jpg"
  */
-const generateLtrbxdUrl = (filmId, slug, w, h) => {
-  const filmIdStr = String(filmId);
-  const idPath = filmIdStr.split("").join("/");
-  // Note: the dash between filmIdStr and slug is required for Ltrbxd CDN
-  return `https://a.ltrbxd.com/resized/film-poster/${idPath}/${filmIdStr}-${slug}-0-${w}-0-${h}-crop.jpg`;
+const formatPosterUrl = (partialPath, width, height) => {
+  if (!partialPath) return "/poster-placeholder2.jpg";
+
+  // Replace the 230-0-345 pattern with our dynamic width/height
+  const highResPath = partialPath.replace(
+    /\d+-0-\d+-crop$/,
+    `${width}-0-${height}-crop`
+  );
+
+  return `https://a.ltrbxd.com/resized/${highResPath}.jpg`;
 };
 
-function parseDisplayName(displayName) {
-  if (!displayName) return { title: null, year: null };
-  const match = displayName.match(/^(.+?)\s+\((\d{4})\)$/);
-  if (match) return { title: match[1], year: match[2] };
-  return { title: displayName, year: null };
+function parseDisplayName(title, year) {
+  return {
+    displayTitle: title || "Unknown Title",
+    displayYear: year ? Math.floor(year) : null,
+  };
 }
 
 function StarRating({ rating }) {
@@ -47,25 +54,21 @@ function StarRating({ rating }) {
 }
 
 export default function MovieCard({ movie, isFocused }) {
-  const { filmId, slug, displayName, rating } = movie;
-  const { title, year } = parseDisplayName(displayName);
+  // Mapping the new keys from your API response
+  const { movie_id, title, image_url, year, score } = movie;
+  const { displayTitle, displayYear } = parseDisplayName(title, year);
   
   /**
    * FALLBACK STATE
-   * 0: Original Slug (w/ Year)
-   * 1: Clean Slug (No Year)
-   * 2: High Res (1000px)
-   * 3: Max Res (2000px)
+   * 0: High Res (1000x1500)
+   * 1: Ultra Res (2000x3000)
    */
   const [attempt, setAttempt] = useState(0);
 
   const getActiveUrl = () => {
-    const cleanSlug = slug.replace(/-\d{4}$/, ""); // Remove trailing year if present
-
     switch (attempt) {
-      case 0: return generateLtrbxdUrl(filmId, slug, 1000, 1500);
-      case 1: return generateLtrbxdUrl(filmId, cleanSlug, 1000, 1500);
-      case 2: return generateLtrbxdUrl(filmId, cleanSlug, 2000, 3000);
+      case 0: return formatPosterUrl(image_url, 1000, 1500);
+      case 1: return formatPosterUrl(image_url, 2000, 3000);
       default: return "/poster-placeholder2.jpg";
     }
   };
@@ -73,7 +76,7 @@ export default function MovieCard({ movie, isFocused }) {
   const activeUrl = getActiveUrl();
 
   const handleImageError = () => {
-    if (attempt < 3) {
+    if (attempt < 2) {
       setAttempt((prev) => prev + 1);
     }
   };
@@ -86,31 +89,27 @@ export default function MovieCard({ movie, isFocused }) {
       <div className={styles.themeShadow} />
       <a
         className={styles.card}
-        href={`https://letterboxd.com/film/${slug}/`}
+        href={`https://letterboxd.com/film/${movie_id}/`}
         target="_blank"
         rel="noopener noreferrer"
       >
         <div className={styles.posterWrapper}>
           <img
-            // Key forces React to replace the element on error to trigger new network request
-            key={`${filmId}-${attempt}`}
+            key={`${movie_id}-${attempt}`}
             src={activeUrl}
-            alt={title ?? slug}
+            alt={displayTitle}
             onError={handleImageError}
-            // Performance: Eager for centered card, Lazy for others
             loading={isFocused ? "eager" : "lazy"}
-            // React attribute for fetchpriority
             fetchPriority={isFocused ? "high" : "low"}
           />
         </div>
         <div className={styles.meta}>
-          {(title || year) && (
-            <p className={styles.metaTitle}>
-              {title ?? slug}{" "}
-              {year && <span className={styles.metaYear}>({year})</span>}
-            </p>
-          )}
-          {rating != null && <StarRating rating={rating} />}
+          <p className={styles.metaTitle}>
+            {displayTitle}{" "}
+            {displayYear && <span className={styles.metaYear}>({displayYear})</span>}
+          </p>
+          {/* Using score for the star rating if rating isn't provided */}
+          <StarRating rating={score * 5} />
         </div>
       </a>
     </div>
