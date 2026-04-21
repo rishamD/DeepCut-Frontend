@@ -4,13 +4,10 @@ import styles from "./MovieCard.module.css";
 /**
  * URL FORMATTER
  * Takes the partial path from the model and replaces dimensions.
- * Input: "film-poster/4/3/8/7/5/1/438751-klaus-0-230-0-345-crop"
- * Output: "https://a.ltrbxd.com/resized/film-poster/4/3/8/7/5/1/438751-klaus-0-1000-0-1500-crop.jpg"
  */
 const formatPosterUrl = (partialPath, width, height) => {
   if (!partialPath) return "/poster-placeholder2.jpg";
 
-  // Replace the 230-0-345 pattern with our dynamic width/height
   const highResPath = partialPath.replace(
     /\d+-0-\d+-crop$/,
     `${width}-0-${height}-crop`
@@ -28,12 +25,14 @@ function parseDisplayName(title, year) {
 
 function StarRating({ rating }) {
   const totalStars = 5;
-  const numRating = parseFloat(rating);
+  // Ensure we are working with a number rounded to 1 decimal point
+  const numRating = parseFloat(parseFloat(rating).toFixed(1));
 
   return (
     <div className={styles.starsContainer}>
       <div className={styles.stars}>
         {[...Array(totalStars)].map((_, index) => {
+          // Calculate fill based on the 1-decimal rounded rating
           const fill = Math.min(Math.max(numRating - index, 0), 1) * 100;
           return (
             <div key={index} className={styles.starWrapper}>
@@ -48,13 +47,13 @@ function StarRating({ rating }) {
           );
         })}
       </div>
-      <span className={styles.ratingNum}>{numRating}</span>
+      {/* Displaying the number with exactly 1 decimal point */}
+      <span className={styles.ratingNum}>{numRating.toFixed(1)}</span>
     </div>
   );
 }
 
 export default function MovieCard({ movie, isFocused }) {
-  // Mapping the new keys from your API response
   const { movie_id, title, image_url, year, score } = movie;
   const { displayTitle, displayYear } = parseDisplayName(title, year);
   
@@ -108,7 +107,7 @@ export default function MovieCard({ movie, isFocused }) {
             {displayTitle}{" "}
             {displayYear && <span className={styles.metaYear}>({displayYear})</span>}
           </p>
-          {/* Using score for the star rating if rating isn't provided */}
+          {/* Passing the raw score * 5 to the StarRating component */}
           <StarRating rating={score * 5} />
         </div>
       </a>
