@@ -19,7 +19,7 @@ export default function MovieCarousel({ movies, status }) {
             if (scrollTimeout.current) return;
 
             // Check horizontal (deltaX) or vertical (deltaY) scroll
-            if (Math.abs(e.deltaX) > 10 || Math.abs(e.deltaY) > 10) {
+            if (Math.abs(e.deltaX) > 30 || Math.abs(e.deltaY) > 30) {
                 if (e.deltaX > 0 || e.deltaY > 0) {
                     carouselRef.current?.next();
                 } else {
