@@ -3,7 +3,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 const API_URL =
     "https://aieu3n5qqs247es3gr36nzoese0mlfdw.lambda-url.us-east-2.on.aws/";
 const POLL_INTERVAL = 2500;
-const MAX_POLLS = 12;
+const MAX_POLLS = 24;
 
 export function useRecommendations() {
     const [movies, setMovies] = useState([]);
@@ -58,9 +58,7 @@ export function useRecommendations() {
                 if (!isActiveRef.current) return;
 
                 if (res.status === 429) {
-                    setStatus("ERROR");
-                    setError("System busy. Retrying in 10s...");
-                    pollTimer.current = setTimeout(poll, 10000);
+                    pollTimer.current = setTimeout(poll, 5000);
                     return;
                 }
 

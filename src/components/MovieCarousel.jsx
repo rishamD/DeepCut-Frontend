@@ -16,7 +16,7 @@ export default function MovieCarousel({ movies, status, processInfo }) {
 
         const handleWheel = (e) => {
             if (scrollTimeout.current) return;
-            if (Math.abs(e.deltaX) > 60 || Math.abs(e.deltaY) > 60) {
+            if (Math.abs(e.deltaX) > 30 || Math.abs(e.deltaY) > 30) {
                 if (e.deltaX > 0 || e.deltaY > 0) {
                     carouselRef.current?.next();
                 } else {
