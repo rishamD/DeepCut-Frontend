@@ -25,6 +25,11 @@
 .spinnerWrap {
     position: relative;
     flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .spinner {
@@ -36,16 +41,14 @@
     animation: spin 0.9s linear infinite;
 }
 
-.stepBadge {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.6rem;
-    font-weight: 700;
-    color: #6fe3e1;
-    pointer-events: none;
+/* ── Avatar ──────────────────────────────────────────────── */
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #6fe3e1;
+    animation: popIn 0.3s ease;
 }
 
 /* ── Text ────────────────────────────────────────────────── */
