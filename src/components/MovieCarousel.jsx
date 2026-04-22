@@ -1,169 +1,86 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useRef, useEffect } from "react";
+import { Carousel } from "react-round-carousel";
+import "react-round-carousel/src/index.css"; 
 import styles from "./MovieCarousel.module.css";
 import MovieCard from "./MovieCard";
 
 export default function MovieCarousel({ movies, status }) {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [isHovering, setIsHovering] = useState(false);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-    const autoPlayInterval = useRef(null);
-    const scrollRef = useRef(null);
-
-    const nextSlide = useCallback(() => {
-        if (!movies?.length) return;
-        setActiveIndex((prev) => (prev + 1) % movies.length);
-    }, [movies?.length]);
-
-    const prevSlide = useCallback(() => {
-        if (!movies?.length) return;
-        setActiveIndex((prev) => (prev - 1 + movies.length) % movies.length);
-    }, [movies?.length]);
+    const carouselRef = useRef(null);
+    const scrollTimeout = useRef(null);
 
     useEffect(() => {
-    let cooldown = false;
-
-    const handleKeyDown = (e) => {
-        if (
-            e.target.tagName === "INPUT" ||
-            e.target.tagName === "TEXTAREA"
-        )
-            return;
-        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-        if (cooldown) return;
-
-        if (e.key === "ArrowRight") nextSlide();
-        if (e.key === "ArrowLeft") prevSlide();
-
-        cooldown = true;
-        setTimeout(() => {
-            cooldown = false;
-        }, 300);
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-}, [nextSlide, prevSlide]);
-
-    useEffect(() => {
-        const el = scrollRef.current;
-        if (!el) return;
-
-        let accumulated = 0;
-        let cooldown = false;
+        const handleKeyDown = (e) => {
+            if (e.key === "ArrowLeft") carouselRef.current?.prev();
+            if (e.key === "ArrowRight") carouselRef.current?.next();
+        };
 
         const handleWheel = (e) => {
-            if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
-            e.preventDefault();
+            // Prevent rapid-fire scrolling
+            if (scrollTimeout.current) return;
 
-            if (cooldown) return;
+            // Check horizontal (deltaX) or vertical (deltaY) scroll
+            if (Math.abs(e.deltaX) > 10 || Math.abs(e.deltaY) > 10) {
+                if (e.deltaX > 0 || e.deltaY > 0) {
+                    carouselRef.current?.next();
+                } else {
+                    carouselRef.current?.prev();
+                }
 
-            accumulated += e.deltaX;
-
-            if (accumulated > 100) {
-                nextSlide();
-                accumulated = 0;
-                cooldown = true;
-                setTimeout(() => {
-                    cooldown = false;
-                    accumulated = 0;
-                }, 300);
-            } else if (accumulated < -100) {
-                prevSlide();
-                accumulated = 0;
-                cooldown = true;
-                setTimeout(() => {
-                    cooldown = false;
-                    accumulated = 0;
-                }, 300);
+                // Lock scrolling for 200ms for a smoother experience
+                scrollTimeout.current = setTimeout(() => {
+                    scrollTimeout.current = null;
+                }, 200);
             }
         };
 
-        el.addEventListener("wheel", handleWheel, { passive: false });
-        return () => el.removeEventListener("wheel", handleWheel);
-    }, [nextSlide, prevSlide]);
+        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("wheel", handleWheel, { passive: true });
 
-    useEffect(() => {
-        if (!isAutoPlaying || isHovering || !movies || movies.length <= 1)
-            return;
-        autoPlayInterval.current = setInterval(nextSlide, 5000);
-        return () => clearInterval(autoPlayInterval.current);
-    }, [isAutoPlaying, isHovering, movies, nextSlide]);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("wheel", handleWheel);
+        };
+    }, []);
 
-    if (
-        !status ||
-        status === "IDLE" ||
-        status === "LOADING" ||
-        !movies ||
-        movies.length === 0
-    ) {
+    if (!status || status === "IDLE" || status === "LOADING" || !movies?.length) {
         return null;
     }
 
+    const items = movies.map((movie) => ({
+        content: (
+            <div className={styles.itemInner}>
+                <MovieCard movie={movie} />
+            </div>
+        )
+    }));
+
     return (
         <section className={styles.carouselSection}>
-            {/* Desktop carousel */}
-            <div
-                className={styles.carouselWrapper}
-                ref={scrollRef}
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
-            >
-                <div className={styles.stage}>
-                    {movies.map((movie, index) => {
-                        let offset = index - activeIndex;
-                        const half = Math.ceil(movies.length / 2);
-                        if (offset > half) offset -= movies.length;
-                        if (offset < -half) offset += movies.length;
-
-                        const absOffset = Math.abs(offset);
-                        if (absOffset > 4) return null;
-
-                        return (
-                            <div
-                                key={movie.id || movie.slug}
-                                className={`${styles.carouselSlide} ${offset === 0 ? styles.active : ""}`}
-                                onClick={() => {
-                                    setActiveIndex(index);
-                                    setIsAutoPlaying(false);
-                                }}
-                                style={{
-                                    "--offset": offset,
-                                    "--abs-offset": absOffset,
-                                    zIndex: 10 - absOffset,
-                                }}
-                            >
-                                <MovieCard
-                                    movie={movie}
-                                    isFocused={offset === 0}
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
-
-                <button
-                    className={`${styles.navButton} ${styles.prev}`}
-                    onClick={prevSlide}
+            <div className={styles.outerContainer}>
+                <button 
+                    className={`${styles.navBtn} ${styles.leftBtn}`} 
+                    onClick={() => carouselRef.current?.prev()}
                 >
                     ‹
                 </button>
-                <button
-                    className={`${styles.navButton} ${styles.next}`}
-                    onClick={nextSlide}
+
+                <div className={styles.carouselWrapper}>
+                    <Carousel
+                        ref={carouselRef}
+                        items={items}
+                        slideOnClick={true}
+                        itemWidth={300}
+                        radius={1500}
+                        showControls={false}
+                    />
+                </div>
+
+                <button 
+                    className={`${styles.navBtn} ${styles.rightBtn}`} 
+                    onClick={() => carouselRef.current?.next()}
                 >
                     ›
                 </button>
-            </div>
-
-            {/* Mobile list */}
-            <div className={styles.mobileList}>
-                {movies.map((movie) => (
-                    <MovieCard
-                        key={movie.id || movie.slug}
-                        movie={movie}
-                        isFocused={false}
-                    />
-                ))}
             </div>
         </section>
     );

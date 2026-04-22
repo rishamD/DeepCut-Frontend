@@ -1,18 +1,34 @@
+/* Update these specific classes in MovieCard.module.css */
+
 .cardWrapper {
     position: relative;
-    /* Increase baseline width from 12.5rem to 18rem */
     width: 14rem; 
     flex-shrink: 0;
     z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: visible !important;
-    
-    /* Force GPU to keep vector text sharp */
+    /* Ensure this is visible */
+    overflow: visible !important; 
     transform-style: preserve-3d;
     backface-visibility: hidden;
-    will-change: transform;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: #111116;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* REMOVE overflow: hidden; it clips 3D content */
+    overflow: visible; 
+    position: relative;
+    z-index: 2;
+    image-rendering: -webkit-optimize-contrast;
+    /* Ensure it stays in front of the shadow */
+    transform: translateZ(1px); 
 }
 
 .themeShadow {
@@ -58,21 +74,7 @@
     opacity: 1;
 }
 
-.card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    background: #111116;
-    border-radius: 0.75rem;
-    text-decoration: none;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-    position: relative;
-    z-index: 2;
-    /* Keeps images sharp */
-    image-rendering: -webkit-optimize-contrast;
-    transform: translateZ(0);
-}
+
 
 .posterWrapper {
     width: 100%;
