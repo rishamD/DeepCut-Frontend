@@ -3,6 +3,7 @@ import { Carousel } from "react-round-carousel";
 import "react-round-carousel/src/index.css";
 import styles from "./MovieCarousel.module.css";
 import MovieCard from "./MovieCard";
+import LoadingState from "./LoadingState";
 
 export default function MovieCarousel({ movies, status, processInfo }) {
     const carouselRef = useRef(null);
@@ -36,26 +37,12 @@ export default function MovieCarousel({ movies, status, processInfo }) {
 
     if (!status || status === "IDLE") return null;
 
-    if (status === "LOADING") {
-        return (
-            <section className={styles.carouselSection}>
-                <div className={styles.loadingContainer}>
-                    <div className={styles.loaderLine}>
-                        <div className={styles.loaderProgress} />
-                    </div>
-                    <div className={styles.loadingMeta}>
-                        <h3 className={styles.loadingStatus}>
-                            {processInfo?.usernameFound
-                                ? `Analyzing ${processInfo.movieCount} Films`
-                                : "Locating Letterboxd Profile..."}
-                        </h3>
-                        <p className={styles.loadingSubtext}>
-                            Building your custom recommendation engine
-                        </p>
-                    </div>
-                </div>
-            </section>
-        );
+   if (status === "LOADING") {
+    return (
+        <section className={styles.carouselSection}>
+            <LoadingState info={processInfo} />
+        </section>
+    );
     }
 
     if (!movies?.length) return null;
@@ -72,16 +59,25 @@ return (
     <>
         {/* Banner sits ABOVE the carousel section, outside the 3D context */}
         <div className={styles.resultsBanner}>
-            <span className={styles.checkmark}>✓</span>
-            <span className={styles.bannerText}>
-                Based on{" "}
-                <strong>{processInfo?.movieCount ?? movies.length} films</strong>{" "}
-                from your Letterboxd
-            </span>
-            <span className={styles.bannerCount}>
-                {movies.length} recommendations
-            </span>
-        </div>
+    {processInfo?.avatarUrl && (
+        <img
+            src={processInfo.avatarUrl}
+            alt="Profile avatar"
+            className={styles.bannerAvatar}
+            referrerPolicy="no-referrer"
+        />
+    )}
+    <div className={styles.bannerInfo}>
+        <span className={styles.bannerText}>
+            Based on{" "}
+            <strong>{processInfo?.movieCount ?? movies.length} films</strong>{" "}
+            from your Letterboxd
+        </span>
+        <span className={styles.bannerCount}>
+            {movies.length} recommendations
+        </span>
+    </div>
+</div>
 
         <section className={styles.carouselSection}>
             <div className={styles.outerContainer}>

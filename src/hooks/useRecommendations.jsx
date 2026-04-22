@@ -77,6 +77,8 @@ export function useRecommendations() {
                     setProcessInfo({
                         usernameFound: data.username_found || false,
                         movieCount: data.movie_count || 0,
+                        avatarUrl: data.avatar_url || null,
+                        message: data.message || null,
                     });
 
                     pollCount.current += 1;
@@ -94,6 +96,8 @@ export function useRecommendations() {
                     setProcessInfo((prev) => ({
                         ...prev,
                         movieCount: data.movie_count || prev.movieCount,
+                        avatarUrl: data.avatar_url || prev.avatarUrl,
+                        message: data.message || prev.message,
                     }));
                     setStatus("COMPLETE");
                     return;

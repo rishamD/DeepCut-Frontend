@@ -119,3 +119,26 @@
     from { opacity: 0; transform: translateY(4px); }
     to   { opacity: 1; transform: translateY(0); }
 }
+/* LoadingState.module.css — replace duplicate .avatar and .spinnerWrap rules */
+
+.spinnerWrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* DO NOT add border-radius + overflow:hidden here — it clips nothing useful
+       and can interfere with the img rendering */
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #6fe3e1;
+    display: block;
+    animation: popIn 0.3s ease;
+}
