@@ -98,8 +98,8 @@ export default function MovieCard({ movie, isFocused }) {
             src={activeUrl}
             alt={displayTitle}
             onError={handleImageError}
-            loading={isFocused ? "eager" : "lazy"}
-            fetchPriority={isFocused ? "high" : "low"}
+            loading="eager" 
+            fetchPriority="high"
           />
         </div>
         <div className={styles.meta}>

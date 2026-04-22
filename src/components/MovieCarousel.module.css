@@ -1,103 +1,71 @@
-/* MovieCarousel.module.css */
-
 .carouselSection {
     width: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
+    margin-top: 8rem;
     overflow: visible;
-    margin: 2rem 0;
-    opacity: 0;
-    animation: fadeIn 1s ease forwards;
 }
 
-@keyframes fadeIn {
-    to { opacity: 1; }
+.outerContainer {
+    position: relative;
+    width: 100%;
+    max-width: 1600px;
+    height: 500px;
+    display: flex;
+    align-items: center;
 }
 
 .carouselWrapper {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    height: 450px;
-}
-
-.stage {
-    position: relative;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    perspective: 2000px;
+    overflow: visible;
 }
 
-.carouselSlide {
+.navBtn {
     position: absolute;
-    width: 14rem;
-    left: 50%;
-    top: 50%;
-    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-    backface-visibility: hidden;
-    cursor: pointer;
-
-    transform:
-        translateX(calc(-50% + var(--offset) * 11rem))
-        translateY(-50%)
-        scale(calc(1 - var(--abs-offset) * 0.12));
-
-    opacity: calc(1 - var(--abs-offset) * 0.2);
-    pointer-events: auto;
-}
-
-.carouselSlide.active {
-    transform: translateX(-50%) translateY(-50%) scale(1.15);
-    opacity: 1;
-    z-index: 100;
-}
-
-.navButton {
-    position: absolute;
-    top: 50%;
+    /* Adjusted to top 25% */
+    top: 25%;
     transform: translateY(-50%);
-    background: transparent;
-    color: rgba(255, 255, 255, 0.4);
-    border: none;
-    width: 2.5rem;
-    height: 2.5rem;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 2.5rem;
     display: flex;
-    justify-content: center;
     align-items: center;
-    transition: color 0.2s ease;
-    z-index: 200;
-    line-height: 1;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
 }
 
-.navButton:hover {
-    color: rgba(255, 255, 255, 0.95);
-    background: transparent;
-    box-shadow: none;
+.leftBtn {
+    left: 2rem;
 }
 
-.prev { left: -3rem; }
-.next { right: -3rem; }
-.mobileList {
-    display: none;
+.rightBtn {
+    right: 2rem;
 }
 
-@media (max-width: 768px) {
-    .carouselWrapper {
-        display: none;
-    }
+.navBtn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
+}
 
-    .mobileList {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        width: 100%;
-        padding: 0 1rem;
-        box-sizing: border-box;
-    }
+/* Library Overrides */
+.carouselWrapper :global(.carousel__slide-overlay) {
+    opacity: 1 !important;
+    background: transparent !important;
+}
+
+.carouselWrapper :global(.carousel__slide) {
+    opacity: 1 !important;
+}
+
+.carouselWrapper :global(.carousel__slide > img) {
+    display: none !important;
 }
