@@ -26,10 +26,6 @@ export default function MovieCarousel({ movies, status }) {
                     carouselRef.current?.prev();
                 }
 
-                // Lock scrolling for 200ms for a smoother experience
-                scrollTimeout.current = setTimeout(() => {
-                    scrollTimeout.current = null;
-                }, 200);
             }
         };
 
