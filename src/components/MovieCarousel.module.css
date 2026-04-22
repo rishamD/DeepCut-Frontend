@@ -1,7 +1,8 @@
 .carouselSection {
     width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     margin-top: 8rem;
     overflow: visible;
 }
@@ -68,4 +69,114 @@
 
 .carouselWrapper :global(.carousel__slide > img) {
     display: none !important;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 4rem 2rem;
+    width: 100%;
+    max-width: 600px;
+}
+
+/* A sleek, thin progress line instead of a bulky spinner */
+.loaderLine {
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.loaderProgress {
+    position: absolute;
+    height: 100%;
+    width: 40%;
+    background: var(--gradient-logo); /* Uses your existing brand gradient */
+    box-shadow: 0 0 15px var(--color-primary-glow);
+    animation: slideProgress 2s infinite ease-in-out;
+}
+
+.loadingMeta {
+    text-align: center;
+}
+
+.loadingStatus {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: #fff;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.loadingSubtext {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+@keyframes slideProgress {
+    0% { left: -40%; }
+    100% { left: 100%; }
+}
+/* ── Results banner ──────────────────────────────────────── */
+.resultsBanner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1.25rem;
+    background: rgba(111, 227, 225, 0.06);
+    border: 1px solid rgba(111, 227, 225, 0.2);
+    border-radius: 99px;
+    /* No margin-bottom needed, the carousel section has margin-top */
+    animation: fadeSlideIn 0.5s ease both;
+    /* Ensure it's never inside a 3D context */
+    position: relative;
+    z-index: 10;
+}
+
+.checkmark {
+    color: #6fe3e1;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.bannerText {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.bannerText strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+.bannerCount {
+    font-size: 0.75rem;
+    color: #6fe3e1;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-left: 0.25rem;
+    padding-left: 0.75rem;
+    border-left: 1px solid rgba(111, 227, 225, 0.3);
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
