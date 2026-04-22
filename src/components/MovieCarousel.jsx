@@ -20,8 +20,6 @@ export default function MovieCarousel({ movies, status }) {
     }, [movies?.length]);
 
     useEffect(() => {
-    let cooldown = false;
-
     const handleKeyDown = (e) => {
         if (
             e.target.tagName === "INPUT" ||
@@ -34,10 +32,7 @@ export default function MovieCarousel({ movies, status }) {
         if (e.key === "ArrowRight") nextSlide();
         if (e.key === "ArrowLeft") prevSlide();
 
-        cooldown = true;
-        setTimeout(() => {
-            cooldown = false;
-        }, 300);
+        
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -55,26 +50,16 @@ export default function MovieCarousel({ movies, status }) {
             if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
             e.preventDefault();
 
-            if (cooldown) return;
 
             accumulated += e.deltaX;
 
             if (accumulated > 100) {
                 nextSlide();
                 accumulated = 0;
-                cooldown = true;
-                setTimeout(() => {
-                    cooldown = false;
-                    accumulated = 0;
-                }, 300);
+                
             } else if (accumulated < -100) {
                 prevSlide();
                 accumulated = 0;
-                cooldown = true;
-                setTimeout(() => {
-                    cooldown = false;
-                    accumulated = 0;
-                }, 300);
             }
         };
 
