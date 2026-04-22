@@ -20,18 +20,29 @@ export default function MovieCarousel({ movies, status }) {
     }, [movies?.length]);
 
     useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (
-                e.target.tagName === "INPUT" ||
-                e.target.tagName === "TEXTAREA"
-            )
-                return;
-            if (e.key === "ArrowRight") nextSlide();
-            if (e.key === "ArrowLeft") prevSlide();
-        };
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [nextSlide, prevSlide]);
+    let cooldown = false;
+
+    const handleKeyDown = (e) => {
+        if (
+            e.target.tagName === "INPUT" ||
+            e.target.tagName === "TEXTAREA"
+        )
+            return;
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        if (cooldown) return;
+
+        if (e.key === "ArrowRight") nextSlide();
+        if (e.key === "ArrowLeft") prevSlide();
+
+        cooldown = true;
+        setTimeout(() => {
+            cooldown = false;
+        }, 300);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+}, [nextSlide, prevSlide]);
 
     useEffect(() => {
         const el = scrollRef.current;
@@ -55,7 +66,7 @@ export default function MovieCarousel({ movies, status }) {
                 setTimeout(() => {
                     cooldown = false;
                     accumulated = 0;
-                }, 600);
+                }, 300);
             } else if (accumulated < -100) {
                 prevSlide();
                 accumulated = 0;
@@ -63,7 +74,7 @@ export default function MovieCarousel({ movies, status }) {
                 setTimeout(() => {
                     cooldown = false;
                     accumulated = 0;
-                }, 600);
+                }, 300);
             }
         };
 
