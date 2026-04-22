@@ -38,17 +38,32 @@ export default function MovieCarousel({ movies, status }) {
         if (!el) return;
 
         let accumulated = 0;
+        let cooldown = false;
 
         const handleWheel = (e) => {
             if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
             e.preventDefault();
+
+            if (cooldown) return;
+
             accumulated += e.deltaX;
+
             if (accumulated > 100) {
                 nextSlide();
                 accumulated = 0;
+                cooldown = true;
+                setTimeout(() => {
+                    cooldown = false;
+                    accumulated = 0;
+                }, 600);
             } else if (accumulated < -100) {
                 prevSlide();
                 accumulated = 0;
+                cooldown = true;
+                setTimeout(() => {
+                    cooldown = false;
+                    accumulated = 0;
+                }, 600);
             }
         };
 
