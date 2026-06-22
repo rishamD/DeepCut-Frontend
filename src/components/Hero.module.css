@@ -8,13 +8,11 @@
 
 .wrapper::before {
     content: "";
-    position: absolute;
+    position: fixed;
     inset: 0;
     background-image: url("/poster-placeholder.jpg");
     background-size: cover;
     background-position: center;
-    /* Fixed attachment breaks on iOS — use scroll instead */
-    background-attachment: scroll;
     opacity: 0.3;
     z-index: 0;
 }
