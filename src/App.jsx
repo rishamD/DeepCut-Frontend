@@ -1,6 +1,5 @@
 import Hero from "./components/Hero";
 import SearchBar from "./components/SearchBar";
-import MovieGrid from "./components/MovieGrid";
 import MovieCarousel from "./components/MovieCarousel";
 import { useRecommendations } from "./hooks/useRecommendations";
 

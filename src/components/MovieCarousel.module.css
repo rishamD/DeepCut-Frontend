@@ -22,10 +22,39 @@
     perspective: 2000px;
     overflow: visible;
 }
+/* ── Kill the library's default slide border/outline ── */
+.carouselWrapper :global(.carousel__slide) {
+    opacity: 1 !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
 
+.carouselWrapper :global(.carousel__slide--selected) {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.carouselWrapper :global(.carousel__slide-overlay) {
+    opacity: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+}
+
+/* Also target the inner wrapper the library renders */
+.carouselWrapper :global(.carousel__slide > div) {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* ── Nav buttons ── */
 .navBtn {
     position: absolute;
-    /* Adjusted to top 25% */
     top: 25%;
     transform: translateY(-50%);
     z-index: 100;
@@ -57,77 +86,7 @@
     transform: translateY(-50%) scale(1.1);
 }
 
-/* Library Overrides */
-.carouselWrapper :global(.carousel__slide-overlay) {
-    opacity: 1 !important;
-    background: transparent !important;
-}
-
-.carouselWrapper :global(.carousel__slide) {
-    opacity: 1 !important;
-}
-
-.carouselWrapper :global(.carousel__slide > img) {
-    display: none !important;
-}
-
-.loadingContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    padding: 4rem 2rem;
-    width: 100%;
-    max-width: 600px;
-}
-
-/* A sleek, thin progress line instead of a bulky spinner */
-.loaderLine {
-    width: 100%;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.05);
-    position: relative;
-    overflow: hidden;
-    border-radius: 2px;
-}
-
-.loaderProgress {
-    position: absolute;
-    height: 100%;
-    width: 40%;
-    background: var(--gradient-logo); /* Uses your existing brand gradient */
-    box-shadow: 0 0 15px var(--color-primary-glow);
-    animation: slideProgress 2s infinite ease-in-out;
-}
-
-.loadingMeta {
-    text-align: center;
-}
-
-.loadingStatus {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    background: #fff;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 0.5rem;
-}
-
-.loadingSubtext {
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 0.9rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
-
-@keyframes slideProgress {
-    0% { left: -40%; }
-    100% { left: 100%; }
-}
-/* ── Results banner ──────────────────────────────────────── */
+/* ── Results banner ── */
 .resultsBanner {
     display: flex;
     align-items: center;
@@ -136,17 +95,31 @@
     background: rgba(111, 227, 225, 0.06);
     border: 1px solid rgba(111, 227, 225, 0.2);
     border-radius: 99px;
-    /* No margin-bottom needed, the carousel section has margin-top */
     animation: fadeSlideIn 0.5s ease both;
-    /* Ensure it's never inside a 3D context */
     position: relative;
     z-index: 10;
+    /* Allow wrapping on small screens */
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    max-width: calc(100% - 2rem);
 }
 
-.checkmark {
-    color: #6fe3e1;
-    font-size: 0.9rem;
-    font-weight: 700;
+.bannerAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #6fe3e1;
+    flex-shrink: 0;
+}
+
+.bannerInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .bannerText {
@@ -170,6 +143,74 @@
     border-left: 1px solid rgba(111, 227, 225, 0.3);
 }
 
+/* ── Library overrides ── */
+.carouselWrapper :global(.carousel__slide-overlay) {
+    opacity: 1 !important;
+    background: transparent !important;
+}
+
+.carouselWrapper :global(.carousel__slide) {
+    opacity: 1 !important;
+}
+
+.carouselWrapper :global(.carousel__slide > img) {
+    display: none !important;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .carouselSection {
+        margin-top: 3rem;
+    }
+
+    .outerContainer {
+        height: 420px;
+    }
+
+    .navBtn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.8rem;
+    }
+
+    .leftBtn {
+        left: 0.5rem;
+    }
+
+    .rightBtn {
+        right: 0.5rem;
+    }
+
+    .bannerText {
+        font-size: 0.78rem;
+    }
+
+    .bannerCount {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .outerContainer {
+        height: 380px;
+    }
+
+    .navBtn {
+        width: 38px;
+        height: 38px;
+        font-size: 1.5rem;
+        top: 30%;
+    }
+
+    .leftBtn {
+        left: 0.25rem;
+    }
+
+    .rightBtn {
+        right: 0.25rem;
+    }
+}
+
 @keyframes fadeSlideIn {
     from {
         opacity: 0;
@@ -179,18 +220,4 @@
         opacity: 1;
         transform: translateY(0);
     }
-}
-.bannerAvatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #6fe3e1;
-    flex-shrink: 0;
-}
-
-.bannerInfo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
 }

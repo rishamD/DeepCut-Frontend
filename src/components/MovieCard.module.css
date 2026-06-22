@@ -1,15 +1,12 @@
-/* Update these specific classes in MovieCard.module.css */
-
 .cardWrapper {
     position: relative;
-    width: 14rem; 
+    width: 14rem;
     flex-shrink: 0;
     z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Ensure this is visible */
-    overflow: visible !important; 
+    overflow: visible !important;
     transform-style: preserve-3d;
     backface-visibility: hidden;
 }
@@ -22,13 +19,11 @@
     border-radius: 0.75rem;
     text-decoration: none;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    /* REMOVE overflow: hidden; it clips 3D content */
-    overflow: visible; 
+    overflow: visible;
     position: relative;
     z-index: 2;
     image-rendering: -webkit-optimize-contrast;
-    /* Ensure it stays in front of the shadow */
-    transform: translateZ(1px); 
+    transform: translateZ(1px);
 }
 
 .themeShadow {
@@ -54,7 +49,6 @@
     will-change: filter, transform;
 }
 
-/* Restored Layer 1: Main glow */
 .themeShadow::before {
     mix-blend-mode: screen;
     transform: translateY(2.1875rem) scale(1.15);
@@ -62,24 +56,23 @@
     opacity: 0.4;
 }
 
-/* Restored Layer 2: Deep colorful atmospheric glow */
 .themeShadow::after {
     mix-blend-mode: screen;
     transform: translateY(2.8rem) scale(1.15);
     filter: blur(3.5rem) brightness(1.8) saturate(2);
 }
 
-/* Carousel and Hover triggers */
 .cardWrapper:hover .themeShadow {
     opacity: 1;
 }
-
-
 
 .posterWrapper {
     width: 100%;
     aspect-ratio: 2/3;
     background: #000;
+    /* Clip the image to card corners without clipping 3D shadow */
+    border-radius: 0.75rem 0.75rem 0 0;
+    overflow: hidden;
 }
 
 .posterWrapper img {
@@ -90,34 +83,37 @@
 }
 
 .meta {
-    padding: 1rem 0.8rem;
+    padding: 0.75rem 0.7rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
     background: #16161f;
+    border-radius: 0 0 0.75rem 0.75rem;
 }
 
 .metaTitle {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 500;
     color: #fff;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    /* Standard property for browsers that support the unprefixed spec */
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     white-space: normal;
 }
 
 .metaYear {
     color: rgba(255, 255, 255, 0.4);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
 }
 
-/* Star Rating Styles */
+/* ── Star rating ── */
 .starsContainer {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .stars {
@@ -127,7 +123,7 @@
 
 .starWrapper {
     position: relative;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1;
 }
 
@@ -145,7 +141,37 @@
 }
 
 .ratingNum {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: #9ca3af;
     font-weight: 600;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .cardWrapper {
+        width: 11rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cardWrapper {
+        width: 9rem;
+    }
+
+    .meta {
+        padding: 0.6rem 0.55rem;
+        gap: 0.3rem;
+    }
+
+    .metaTitle {
+        font-size: 0.74rem;
+    }
+
+    .starWrapper {
+        font-size: 0.75rem;
+    }
+
+    .ratingNum {
+        font-size: 0.65rem;
+    }
 }
